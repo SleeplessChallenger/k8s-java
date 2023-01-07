@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order
+spec:
+  replicas: 3
+  revisionHistoryLimit: 7
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 2
+      maxSurge: 2
+  selector:
+    matchLabels:
+      app: order-pod # see, it is simply for MATCHING pods. If not matching - OK, but warning
+  template:
+    metadata:
+      labels:
+        app: order-pod # this deploy will be tied to any pod that has label of `order`
+    spec:
+      containers:
+        - name: order
+          image: "amigoscode/kubernetes:order-v1"
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 8087
+--- # this means new resource
+apiVersion: v1
+kind: Service
+metadata:
+  name: order # name of the Service
+spec:
+  type: ClusterIP
+  selector:
+    app: order-pod # this will match to the pods above. label: key - value
+  ports:
+    - port: 8084
+      targetPort: 8087 # port of the target container

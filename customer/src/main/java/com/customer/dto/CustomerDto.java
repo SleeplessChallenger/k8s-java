@@ -1,4 +1,4 @@
-package com.k8sjava.order.dto;
+package com.customer.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,13 +6,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderDto {
+public class CustomerDto {
     private Integer customerId;
-    private List<String> orders;
+    private List<Map<String, String>> customerData;
     private String message;
 }

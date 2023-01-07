@@ -1,6 +1,6 @@
-package com.k8sjava.order.api;
+package com.order.api;
 
-import com.k8sjava.order.dto.OrderDto;
+import com.order.dto.OrderDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

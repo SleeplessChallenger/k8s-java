@@ -1,6 +1,6 @@
-package com.k8sjava.customer.api;
+package com.customer.api;
 
-import com.k8sjava.customer.dto.CustomerDto;
+import com.customer.dto.CustomerDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
