@@ -29,9 +29,9 @@ public class CustomerController {
     private static final String ALL_DATA = "/api/v1/customer";
     private static final String CUSTOMERS_DATA = "/api/v1/customer/{customerId}/orders";
     private static final ObjectWriter MAPPER = new ObjectMapper().writer().withDefaultPrettyPrinter();
-    @Value("${order_host}")
+    @Value("${order.msa_host}")
     private String host;
-    @Value("${order_port}")
+    @Value("${order.msa_port}")
     private String port;
 
     @GetMapping(path = ALL_DATA, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -68,8 +68,7 @@ public class CustomerController {
     @GetMapping(path = "/api/v1/order/data/{customerId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getCustomerOrderData(@PathVariable @NotNull int customerId) throws JsonProcessingException {
         final String fullUrl = "http://" + host + ":" + port + "/api/v1/order/customer/" + customerId;
-        final Object response = new RestTemplate()
-                .getForObject(fullUrl, Object.class);
+        final Object response = new RestTemplate().getForObject(fullUrl, Object.class);
         return ResponseEntity
                 .status(HttpStatus.FOUND.value())
                 .body(MAPPER.writeValueAsString(response));
