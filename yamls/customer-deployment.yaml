@@ -1,41 +1,39 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: customer
+  name: customer-java-deploy
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: customer
+      app: customer-java-deploy
   template:
     metadata:
       labels:
-        app: customer
+        app: customer-java-deploy # deployment from selector will be tied to each pod with this label associated with it
     spec:
       containers:
-        - name: customer
-          image: "amigoscode/kubernetes:customer-v1"
+        - name: customer-java-deploy
+          image: "enoshima/springboot-k8s-customer:latest"
           resources:
             limits:
               memory: "128Mi"
               cpu: "500m"
           env:
-            - name: ORDER_SERVICE
-              # value: "10.244.1.15:8081" # if we use `port-forward`, then this will break after pod dies
-              value: "order:8084" # this is Service name and Service outbound port. `order` is DNS
+            - name: JAVA_OPTS
+              value: "-Dorder.msa_host=10.103.24.91 -Dorder.msa_port=8085" # this is Service name and Service outbound port
           ports:
-            - containerPort: 8080
+            - containerPort: 8091 # this one should match PORT of the app server
 
----
-#
+#---
 #apiVersion: v1
 #kind: Service
 #metadata:
-#  name: customer-node
+#  name: customer-java-node
 #spec:
 #  type: NodePort # it makes this service available on all nodes
 #  selector:
-#    app: customer # need to match name of the pod from labels
+#    app: customer-java-deploy # need to match name of the pod from labels
 #  ports:
 #    - port: 8089
 #      targetPort: 8080

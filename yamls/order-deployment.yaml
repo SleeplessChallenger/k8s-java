@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: order
+  name: order-java-deploy
 spec:
   replicas: 3
   revisionHistoryLimit: 7
@@ -12,30 +12,31 @@ spec:
       maxSurge: 2
   selector:
     matchLabels:
-      app: order-pod # see, it is simply for MATCHING pods. If not matching - OK, but warning
+      app: order-java-deploy # see, it is simply for MATCHING pods. If not matching - OK, but warning
   template:
     metadata:
       labels:
-        app: order-pod # this deploy will be tied to any pod that has label of `order`
+        app: order-java-deploy # this deploy will be tied to any pod that has label of `order`
     spec:
       containers:
-        - name: order
-          image: "amigoscode/kubernetes:order-v1"
+        - name: order-java-deploy
+          image: "enoshima/springboot-k8s-order:latest"
           resources:
             limits:
               memory: "128Mi"
               cpu: "500m"
           ports:
-            - containerPort: 8087
+            - containerPort: 8090 # this one should match PORT of the app server
+
 --- # this means new resource
 apiVersion: v1
 kind: Service
 metadata:
-  name: order # name of the Service
+  name: order-java # name of the Service
 spec:
   type: ClusterIP
   selector:
-    app: order-pod # this will match to the pods above. label: key - value
+    app: order-java-deploy # this will match to the pods above. label: key - value
   ports:
-    - port: 8084
-      targetPort: 8087 # port of the target container
+    - port: 8085
+      targetPort: 8090 # port of the target container
