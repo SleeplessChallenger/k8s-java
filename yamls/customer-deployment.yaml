@@ -25,16 +25,42 @@ spec:
           ports:
             - containerPort: 8091 # this one should match PORT of the app server
 
-#---
-#apiVersion: v1
-#kind: Service
-#metadata:
-#  name: customer-java-node
-#spec:
-#  type: NodePort # it makes this service available on all nodes
-#  selector:
-#    app: customer-java-deploy # need to match name of the pod from labels
-#  ports:
-#    - port: 8089
-#      targetPort: 8080
-#      nodePort: 30002 # opens up port on all nodes. It will accept incoming request and then forward to port (8089 in our case)
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: customer-java-node
+spec:
+  type: NodePort # it makes this service available on all nodes
+  selector:
+    app: customer-java-deploy # need to match name of the pod from labels
+  ports:
+    - port: 8089
+      targetPort: 8091
+      nodePort: 30003 # opens up port on all nodes. It will accept incoming request and then forward to port (8089 in our case)
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: customer-java-cluster-ip
+spec:
+  type: ClusterIP
+  selector:
+    app: customer-java-deploy # need to match name of the pod from labels
+  ports:
+    - port: 8089
+      targetPort: 8091
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: customer-java-cluster-ip
+spec:
+  type: LoadBalancer
+  selector:
+    app: customer-java-deploy # need to match name of the pod from labels
+  ports:
+    - port: 8099
+      targetPort: 8091

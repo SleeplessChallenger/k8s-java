@@ -7,3 +7,5 @@
   * I commented **order** service host and port to force provision of params via -D. Plus, it helped me to catch
     errors/whether container is OK during K8S deploy phase
 `docker run -e JAVA_OPTS="-Dorder.msa_host=host.docker.internal -Dorder.msa_port=8090" -p 8091:8091 springboot-k8s-customer:latest`
+  * to make port-forward between deploy and svc: `kubectl port-forward deployment/customer-java-deploy 8091:8091`
+* Recall that for using LoadBalancer svc we need to issue `minikube tunnel`
