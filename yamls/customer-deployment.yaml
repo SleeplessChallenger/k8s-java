@@ -7,10 +7,14 @@ spec:
   selector:
     matchLabels:
       app: customer-java-deploy
+      tier: backend
   template:
     metadata:
-      labels:
-        app: customer-java-deploy # deployment from selector will be tied to each pod with this label associated with it
+      labels: # these 4 are all labels
+        app: customer-java-deploy # RS from selector will be tied to each pod with this label associated with it
+        environment: test # just to specify which environment is used (QA, production etc)
+        tier: backend
+        department: engineering
     spec:
       containers:
         - name: customer-java-deploy
@@ -34,6 +38,7 @@ spec:
   type: NodePort # it makes this service available on all nodes
   selector:
     app: customer-java-deploy # need to match name of the pod from labels
+    tier: backend
   ports:
     - port: 8089
       targetPort: 8091

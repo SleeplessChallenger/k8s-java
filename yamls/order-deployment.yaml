@@ -12,7 +12,7 @@ spec:
       maxSurge: 2
   selector:
     matchLabels:
-      app: order-java-deploy # see, it is simply for MATCHING pods. If not matching - OK, but warning
+      app: order-java-deploy # ReplicaSet will manage everything that match this label
   template:
     metadata:
       labels:
